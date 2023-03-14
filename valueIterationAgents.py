@@ -72,7 +72,8 @@ class ValueIterationAgent(ValueEstimationAgent):
             #Keeping a hard copy according to Ed
             for state in states:
                 actionList = self.mdp.getPossibleActions(state)
-                if (actionList): #could be the terminal state, which results in an empty max argument
+                hasValidAction = bool(actionList)
+                if (hasValidAction): #could be the terminal state, which results in an empty max argument
                     value_copy[state] = max([self.computeQValueFromValues(state, action) 
                                          for action in actionList])
             self.values = value_copy

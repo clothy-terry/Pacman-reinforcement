@@ -63,9 +63,9 @@ def question2e():
     """
       Avoid both exits and the cliff (so an episode should never terminate).
     """
-    answerDiscount = 5
-    answerNoise = 0
-    answerLivingReward = 5
+    answerDiscount = 5.0
+    answerNoise = 0.0
+    answerLivingReward = 5.0
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
