@@ -196,12 +196,11 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
+        feature = self.featExtractor.getFeatures(state, action)  
         qValue = 0
-        featureVector = self.featExtractor.getFeatures(state, action) 
-        for each in featureVector :
-            w = self.weights[each]
-            qValue += w * featureVector[each]
-        print (qValue)    
+        for feat in feature:
+            w = self.weights[feat]
+            qValue += feature[feat] * w
         return qValue
         
 
@@ -211,21 +210,21 @@ class ApproximateQAgent(PacmanQAgent):
         """
         "*** YOUR CODE HERE ***"
         difference = (reward + self.discount*self.getValue(nextState)) - self.getQValue(state, action)
-        featureVector = self.featExtractor.getFeatures(state, action) 
-        for each in featureVector:
-            w = self.weights[each]
-            w = w + self.alpha*difference*featureVector[each]
+        feature = self.featExtractor.getFeatures(state, action)
+        for feat in feature:
+            self.weights[feat] += feature[feat]*self.alpha*difference
         return self.weights
-
-        
 
     def final(self, state):
         """Called at the end of each game."""
         # call the super-class final method
-        PacmanQAgent.final(self, state)
+        
 
         # did we finish training?
         if self.episodesSoFar == self.numTraining:
             # you might want to print your weights here for debugging
+            print(self.weights)
             "*** YOUR CODE HERE ***"
             pass
+        PacmanQAgent.final(self, state)
+
