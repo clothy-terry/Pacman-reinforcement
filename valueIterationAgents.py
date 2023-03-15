@@ -73,6 +73,8 @@ class ValueIterationAgent(ValueEstimationAgent):
             for state in states:
                 actionList = self.mdp.getPossibleActions(state)
                 hasValidAction = bool(actionList)
+                if (not hasValidAction):
+                    value_copy[state] = 0
                 if (hasValidAction): #could be the terminal state, which results in an empty max argument
                     value_copy[state] = max([self.computeQValueFromValues(state, action) 
                                          for action in actionList])
@@ -94,11 +96,10 @@ class ValueIterationAgent(ValueEstimationAgent):
         "*** YOUR CODE HERE ***"
         transition = self.mdp.getTransitionStatesAndProbs(state, action)
         q_value = 0
-        if (self.mdp.isTerminal(state)):
-            return q_value
-        for (new_state, new_prob) in transition:
-            q_value+=new_prob*(self.mdp.getReward(state, action, new_state)
-                               + self.discount*self.getValue(new_state))
+        if (not self.mdp.isTerminal(state)):
+            for (new_state, t) in transition:
+                q_value += t * (self.mdp.getReward(state, action, new_state)
+                                + self.discount*self.getValue(new_state))
         return q_value
         util.raiseNotDefined()
 
@@ -112,14 +113,14 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        best_action, max_val = None, float("-inf")
-        if (self.mdp.isTerminal(state)):
-            return best_action
-        actionList = self.mdp.getPossibleActions(state)
-        for action in actionList:
-            if self.computeQValueFromValues(state, action) > max_val:
-                max_val, best_action = self.computeQValueFromValues(state, action), action
-        return best_action
+        if (not self.mdp.isTerminal(state)):
+            optimalAction = util.Counter()
+            actionList = self.mdp.getPossibleActions(state)
+            for action in actionList:
+                qval = self.computeQValueFromValues(state, action)
+                optimalAction[action] = qval
+            return optimalAction.argMax()
+        return None
         util.raiseNotDefined()
 
     def getPolicy(self, state):
