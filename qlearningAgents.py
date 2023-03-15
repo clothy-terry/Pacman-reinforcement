@@ -196,10 +196,13 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
-        feature = self.featExtractor.getFeatures(state, action)[(state, action)]  
-        w = self.weights[feature]
-        
-        return w*feature
+        qValue = 0
+        featureVector = self.featExtractor.getFeatures(state, action) 
+        for each in featureVector :
+            w = self.weights[each]
+            qValue += w * featureVector[each]
+        print (qValue)    
+        return qValue
         
 
     def update(self, state, action, nextState, reward: float):
@@ -208,8 +211,11 @@ class ApproximateQAgent(PacmanQAgent):
         """
         "*** YOUR CODE HERE ***"
         difference = (reward + self.discount*self.getValue(nextState)) - self.getQValue(state, action)
-        feature = self.featExtractor.getFeatures(state, action)[(state, action)]  
-        self.weights[feature] += self.alpha*difference*feature
+        featureVector = self.featExtractor.getFeatures(state, action) 
+        for each in featureVector:
+            w = self.weights[each]
+            w = w + self.alpha*difference*featureVector[each]
+        return self.weights
 
         
 
