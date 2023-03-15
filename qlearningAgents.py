@@ -70,7 +70,7 @@ class QLearningAgent(ReinforcementAgent):
             return 0.0
         curState_qValueList = []
         for action in self.getLegalActions(state):
-            curState_qValueList.append(self.dic[(state, action)])
+            curState_qValueList.append(self.getQValue(state, action))
         res = -999999
         for each in curState_qValueList:
              if each > res:
@@ -90,7 +90,7 @@ class QLearningAgent(ReinforcementAgent):
             return 0.0
         curState_qValueList = []
         for action in self.getLegalActions(state):
-            action_qValue = self.dic[(state, action)]
+            action_qValue = self.getQValue(state, action)
             curState_qValueList.append([state, action, action_qValue])
         res = [None, None, -999999]
         for each in curState_qValueList:
