@@ -97,7 +97,8 @@ class ValueIterationAgent(ValueEstimationAgent):
         if (self.mdp.isTerminal(state)):
             return q_value
         for (new_state, new_prob) in transition:
-            q_value+=new_prob*(self.mdp.getReward(state, action, new_state)+self.discount*self.getValue(new_state))
+            q_value+=new_prob*(self.mdp.getReward(state, action, new_state)
+                               + self.discount*self.getValue(new_state))
         return q_value
         util.raiseNotDefined()
 
@@ -116,7 +117,7 @@ class ValueIterationAgent(ValueEstimationAgent):
             return best_action
         actionList = self.mdp.getPossibleActions(state)
         for action in actionList:
-            if self.computeQValueFromValues(state, action)>max_val:
+            if self.computeQValueFromValues(state, action) > max_val:
                 max_val, best_action = self.computeQValueFromValues(state, action), action
         return best_action
         util.raiseNotDefined()
